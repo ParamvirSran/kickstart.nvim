@@ -3,7 +3,28 @@
 --
 -- See the kickstart.nvim README for more information
 return {
-  -- 'github/copilot.vim',
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup {
+        options = {
+          theme = 'catppuccin-mocha',
+          section_separators = { '', '' },
+          component_separators = { '', '' },
+        },
+        sections = {
+          lualine_a = { 'mode' },
+          lualine_b = { 'branch' },
+          lualine_c = { 'filename' },
+          lualine_x = { 'encoding', 'fileformat', 'filetype' },
+          lualine_y = { 'progress' },
+          lualine_z = { 'location' },
+        },
+      }
+    end,
+  },
+  'github/copilot.vim',
   'nvim-neotest/nvim-nio',
   'tpope/vim-fugitive',
   { 'christoomey/vim-tmux-navigator', lazy = false },
