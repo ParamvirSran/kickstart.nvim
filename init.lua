@@ -115,6 +115,12 @@ vim.opt.showmode = false
 --  See `:help 'clipboard'`
 vim.opt.clipboard = 'unnamedplus'
 
+-- Set tab width to 4 spaces
+vim.opt.tabstop = 4
+-- Set indentation width to 4 spaces
+vim.opt.shiftwidth = 4
+-- Convert tabs to spaces
+vim.opt.expandtab = true
 -- Enable break indent
 vim.opt.breakindent = true
 
