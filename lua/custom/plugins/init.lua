@@ -24,7 +24,7 @@ return {
       }
     end,
   },
-  'github/copilot.vim',
+  -- 'github/copilot.vim',
   'nvim-neotest/nvim-nio',
   'tpope/vim-fugitive',
   { 'christoomey/vim-tmux-navigator', lazy = false },
