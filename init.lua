@@ -162,8 +162,6 @@ vim.opt.scrolloff = 15
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
---
-vim.keymap.set('n', '<leader>pv', '<cmd>Ex<CR>', { desc = 'Open Explorer' })
 vim.keymap.set('n', '<leader>x', '<cmd>source %<CR>', { desc = 'Execute the current file' })
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
