@@ -1,6 +1,7 @@
 return {
   {
     'stevearc/oil.nvim',
+    opts = {},
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       require('oil').setup {
@@ -11,9 +12,9 @@ return {
         -- See :help oil-columns
         columns = {
           'icon',
-          -- 'permissions',
-          -- 'size',
-          -- 'mtime',
+          -- "permissions",
+          -- "size",
+          -- "mtime",
         },
         -- Buffer-local options to use for oil buffers
         buf_options = {
@@ -32,9 +33,9 @@ return {
           concealcursor = 'nvic',
         },
         -- Send deleted files to the trash instead of permanently deleting them (:help oil-trash)
-        delete_to_trash = true,
+        delete_to_trash = false,
         -- Skip the confirmation popup for simple operations (:help oil.skip_confirm_for_simple_edits)
-        skip_confirm_for_simple_edits = true,
+        skip_confirm_for_simple_edits = false,
         -- Selecting a new/moved/renamed file or directory will prompt you to save changes first
         -- (:help prompt_save_on_select_new_entry)
         prompt_save_on_select_new_entry = true,
@@ -53,7 +54,7 @@ return {
         -- Set to `false` to disable, or "name" to keep it on the file names
         constrain_cursor = 'editable',
         -- Set to true to watch the filesystem for changes and reload oil
-        experimental_watch_for_changes = true,
+        experimental_watch_for_changes = false,
         -- Keymaps in oil buffer. Can be any value that `vim.keymap.set` accepts OR a table of keymap
         -- options with a `callback` (e.g. { callback = function() ... end, desc = "", mode = "n" })
         -- Additionally, if it is a string that matches "actions.<name>",
@@ -137,7 +138,7 @@ return {
           -- Width dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
           -- min_width and max_width can be a single value or a list of mixed integer/float types.
           -- max_width = {100, 0.8} means "the lesser of 100 columns or 80% of total"
-          max_width = 0.7,
+          max_width = 0.9,
           -- min_width = {40, 0.4} means "the greater of 40 columns or 40% of total"
           min_width = { 40, 0.4 },
           -- optionally define an integer/float for the exact width of the preview window
@@ -145,7 +146,7 @@ return {
           -- Height dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
           -- min_height and max_height can be a single value or a list of mixed integer/float types.
           -- max_height = {80, 0.9} means "the lesser of 80 columns or 90% of total"
-          max_height = 0.7,
+          max_height = 0.9,
           -- min_height = {5, 0.1} means "the greater of 5 columns or 10% of total"
           min_height = { 5, 0.1 },
           -- optionally define an integer/float for the exact height of the preview window
@@ -180,11 +181,6 @@ return {
           border = 'rounded',
         },
       }
-      -- Open parent directory in current window
-      vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open Parent Directory' })
-
-      -- Open parent directory in floating window
-      vim.keymap.set('n', '<leader>-', require('oil').toggle_float)
     end,
   },
 }
