@@ -10,5 +10,5 @@ spell/
 # For the official `nvim-lua/kickstart.nvim` git repository, we leave it ignored to avoid unneeded
 # merge conflicts.
 lazy-lock.json
-
 .DS_Store
+
