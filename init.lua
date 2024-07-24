@@ -722,15 +722,13 @@ require('lazy').setup({
       -- You can also specify external formatters in here.
       formatters_by_ft = {
         lua = { 'stylua' },
-        md = { 'mdformat' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { 'black' },
         python = { 'isort', 'black' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
-        c = { 'clang-format' },
-        cpp = { 'clang-format' },
+        c = { 'clangd' },
+        cpp = { 'clangd' },
       },
     },
   },
@@ -914,7 +912,7 @@ require('lazy').setup({
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
     config = function()
       -- ensure basic parser are installed
-      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+      local parsers = { 'bash', 'c', 'cpp', 'diff', 'go', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'sql', 'vim', 'vimdoc' }
       require('nvim-treesitter').install(parsers)
 
       ---@param buf integer
