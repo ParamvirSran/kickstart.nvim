@@ -14,7 +14,7 @@ return {
           'icon',
           -- "permissions",
           -- "size",
-          -- "mtime",
+          'mtime',
         },
         -- Buffer-local options to use for oil buffers
         buf_options = {
@@ -183,5 +183,5 @@ return {
       }
     end,
   },
-      vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+  vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' }),
 }
