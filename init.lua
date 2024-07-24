@@ -782,7 +782,6 @@ require('lazy').setup({
         lua = { 'stylua' },
         md = { 'mdformat' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { 'black' },
         python = { 'isort', 'black' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
