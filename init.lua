@@ -169,6 +169,12 @@ vim.o.confirm = true
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
+vim.keymap.set('x', '<leader>p', [["_dP]])
+vim.keymap.set('n', '<leader>ee', 'oif err != nil {<CR>}<Esc>Oreturn err<Esc>')
+vim.keymap.set('n', '<leader>so', function()
+  vim.cmd 'so'
+end)
+vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -348,6 +354,12 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+
+        { '<leader>1', hidden = true },
+        { '<leader>2', hidden = true },
+        { '<leader>3', hidden = true },
+        { '<leader>4', hidden = true },
+        { '<leader>5', hidden = true },
       },
     },
   },
@@ -770,6 +782,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
+        -- python = { 'black' },
         python = { 'isort', 'black' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
