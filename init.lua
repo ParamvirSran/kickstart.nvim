@@ -613,7 +613,7 @@ require('lazy').setup({
       --  See `:help lsp-config` for information about keys and how to configure
       ---@type table<string, vim.lsp.Config>
       local servers = {
-        clangd = {},
+        neocmake = {},
         gopls = {},
         pyright = {},
         -- rust_analyzer = {},
@@ -676,7 +676,9 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
-        'mdformat',
+        'codelldb',
+        'cmakelang',
+        'cmakelint',
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -724,11 +726,10 @@ require('lazy').setup({
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         python = { 'isort', 'black' },
+        cpp = { 'clangd' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
-        -- c = { 'clangd' },
-        -- cpp = { 'clangd' },
       },
     },
   },
@@ -912,7 +913,7 @@ require('lazy').setup({
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
     config = function()
       -- ensure basic parser are installed
-      local parsers = { 'bash', 'c', 'cpp', 'diff', 'go', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'sql', 'vim', 'vimdoc' }
+      local parsers = { 'bash', 'c', 'cmake', 'cpp', 'diff', 'go', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'sql', 'vim', 'vimdoc' }
       require('nvim-treesitter').install(parsers)
 
       ---@param buf integer

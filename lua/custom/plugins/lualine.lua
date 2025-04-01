@@ -14,9 +14,9 @@ return {
         },
         ignore_focus = {},
         always_divide_middle = true,
-        globalstatus = false,
+        globalstatus = true, -- Set to `true` if you want global statusline
         refresh = {
-          statusline = 1000,
+          statusline = 1000, -- Time interval for updating the statusline (in ms)
           tabline = 1000,
           winbar = 1000,
         },

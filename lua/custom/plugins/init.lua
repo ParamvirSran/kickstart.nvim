@@ -5,6 +5,5 @@
 ---@module 'lazy'
 ---@type LazySpec
 return {
-  -- 'github/copilot.vim',
   { 'christoomey/vim-tmux-navigator', lazy = false },
 }
