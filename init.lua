@@ -505,6 +505,12 @@ require('lazy').setup({
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
+      optional = true,
+      opts = function(_, opts)
+        opts.sorting = opts.sorting or {}
+        opts.sorting.comparators = opts.sorting.comparators or {}
+        table.insert(opts.sorting.comparators, 1, require 'clangd_extensions.cmp_scores')
+      end,
     },
     config = function()
       -- Brief aside: **What is LSP?**
@@ -686,7 +692,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        clangd = {},
+        neocmake = {},
         gopls = {},
         pyright = {},
         -- rust_analyzer = {},
@@ -731,7 +737,9 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
-        'mdformat',
+        'codelldb',
+        'cmakelang',
+        'cmakelint',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -787,11 +795,10 @@ require('lazy').setup({
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         python = { 'isort', 'black' },
+        cpp = { 'clangd' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
-        -- c = { 'clangd' },
-        -- cpp = { 'clangd' },
       },
     },
   },
@@ -982,7 +989,23 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'cpp', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = {
+        'cmake',
+        'python',
+        'bash',
+        'cpp',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'go',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
