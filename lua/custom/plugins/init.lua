@@ -3,6 +3,5 @@
 --
 -- See the kickstart.nvim README for more information
 return {
-  -- 'github/copilot.vim',
   { 'christoomey/vim-tmux-navigator', lazy = false },
 }

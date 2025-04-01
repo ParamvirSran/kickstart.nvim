@@ -95,6 +95,7 @@ return {
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
+        'codelldb',
       },
     }
 
@@ -132,9 +133,40 @@ return {
     --   vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
     -- end
 
-    dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-    dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-    dap.listeners.before.event_exited['dapui_config'] = dapui.close
+    -- Add C++ (codelldb) debugger adapter configuration
+    if not dap.adapters['codelldb'] then
+      dap.adapters['codelldb'] = {
+        type = 'server',
+        host = 'localhost',
+        port = '${port}',
+        executable = {
+          command = 'codelldb',
+          args = { '--port', '${port}' },
+        },
+      }
+    end
+
+    -- Add C++ and C debugging configurations
+    dap.configurations.c = {
+      {
+        type = 'codelldb',
+        request = 'launch',
+        name = 'Launch file',
+        program = function()
+          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        end,
+        cwd = '${workspaceFolder}',
+      },
+      {
+        type = 'codelldb',
+        request = 'attach',
+        name = 'Attach to process',
+        pid = require('dap.utils').pick_process,
+        cwd = '${workspaceFolder}',
+      },
+    }
+
+    dap.configurations.cpp = dap.configurations.c -- Use same config for C++ as C
 
     -- Install golang specific config
     require('dap-go').setup {
@@ -144,5 +176,10 @@ return {
         detached = vim.fn.has 'win32' == 0,
       },
     }
+
+    -- DAP UI Listeners
+    dap.listeners.after.event_initialized['dapui_config'] = dapui.open
+    dap.listeners.before.event_terminated['dapui_config'] = dapui.close
+    dap.listeners.before.event_exited['dapui_config'] = dapui.close
   end,
 }
