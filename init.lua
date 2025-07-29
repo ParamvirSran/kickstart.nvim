@@ -158,7 +158,7 @@ vim.o.inccommand = 'split'
 vim.o.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.o.scrolloff = 10
+vim.o.scrolloff = 15
 
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
@@ -168,10 +168,10 @@ vim.o.confirm = true
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 vim.keymap.set('x', '<leader>p', [["_dP]])
-vim.keymap.set('n', '<leader>ee', 'oif err != nil {<CR>}<Esc>Oreturn err<Esc>')
-vim.keymap.set('n', '<leader>so', function()
-  vim.cmd 'so'
-end)
+-- vim.keymap.set('n', '<leader>ee', 'oif err != nil {<CR>}<Esc>Oreturn err<Esc>')
+-- vim.keymap.set('n', '<leader>so', function()
+--   vim.cmd 'so'
+-- end)
 vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
@@ -267,14 +267,14 @@ require('lazy').setup({
 
   -- Alternatively, use `config = function() ... end` for full control over the configuration.
   -- If you prefer to call `setup` explicitly, use:
-  {
-    'lewis6991/gitsigns.nvim',
-    config = function()
-      require('gitsigns').setup {
-        -- Your gitsigns configuration here
-      }
-    end,
-  },
+  -- {
+  --   'lewis6991/gitsigns.nvim',
+  --   config = function()
+  --     require('gitsigns').setup {
+  --       -- Your gitsigns configuration here
+  --     }
+  --   end,
+  -- },
   --
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`.
@@ -282,7 +282,7 @@ require('lazy').setup({
   -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
-    ---@module 'gitsigns'
+---@module 'gitsigns'
     ---@type Gitsigns.Config
     ---@diagnostic disable-next-line: missing-fields
     opts = {
@@ -292,6 +292,7 @@ require('lazy').setup({
         delete = { text = '_' }, ---@diagnostic disable-line: missing-fields
         topdelete = { text = '‾' }, ---@diagnostic disable-line: missing-fields
         changedelete = { text = '~' }, ---@diagnostic disable-line: missing-fields
+      },
       },
     },
   },
@@ -613,7 +614,6 @@ require('lazy').setup({
       --  See `:help lsp-config` for information about keys and how to configure
       ---@type table<string, vim.lsp.Config>
       local servers = {
-        neocmake = {},
         gopls = {},
         pyright = {},
         -- rust_analyzer = {},
@@ -676,9 +676,6 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
-        'codelldb',
-        'cmakelang',
-        'cmakelint',
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -725,9 +722,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        python = { 'isort', 'black' },
-        cpp = { 'clangd' },
-        --
+        -- python = { 'isort', 'black' },
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
       },
