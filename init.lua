@@ -699,9 +699,9 @@ require('lazy').setup({
       end
 
       -- Google internal CiderLSP support for Cloudtop / google3 development
-      -- Uses official lsp/ciderlsp.lua and lua/minlsp.lua (go/ciderlsp-neovim)
+      -- Uses official lsp/ciderlsp.lua (go/ciderlsp-neovim)
       if vim.fn.executable '/google/bin/releases/cider/ciderlsp/ciderlsp' == 1 then
-        require 'minlsp'
+        vim.lsp.enable 'ciderlsp'
       end
     end,
   },
