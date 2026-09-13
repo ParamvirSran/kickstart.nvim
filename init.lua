@@ -699,49 +699,9 @@ require('lazy').setup({
       end
 
       -- Google internal CiderLSP support for Cloudtop / google3 development
+      -- Uses official lsp/ciderlsp.lua and lua/minlsp.lua (go/ciderlsp-neovim)
       if vim.fn.executable '/google/bin/releases/cider/ciderlsp/ciderlsp' == 1 then
-        vim.lsp.config['ciderlsp'] = {
-          cmd = {
-            '/google/bin/releases/cider/ciderlsp/ciderlsp',
-            '--tooltag=nvim-lsp',
-            '--noforward_sync_responses',
-            '--request_options=enable_placeholders,enable:inlay_hints_kotlin_show_local_variable_types',
-          },
-          filetypes = {
-            'borg',
-            'bzl',
-            'c',
-            'cpp',
-            'cs',
-            'dart',
-            'gcl',
-            'go',
-            'googlesql',
-            'graphql',
-            'java',
-            'kotlin',
-            'markdown',
-            'mlir',
-            'ncl',
-            'objc',
-            'patchpanel',
-            'proto',
-            'python',
-            'qflow',
-            'soy',
-            'swift',
-            'textpb',
-            'typescript',
-          },
-          root_dir = function(bufnr, cb)
-            local fname = vim.api.nvim_buf_get_name(bufnr)
-            local root_dir = '/google'
-            if vim.startswith(fname, root_dir) then
-              cb(root_dir)
-            end
-          end,
-        }
-        vim.lsp.enable 'ciderlsp'
+        require 'minlsp'
       end
     end,
   },
