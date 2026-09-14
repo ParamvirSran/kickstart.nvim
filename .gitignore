@@ -12,3 +12,10 @@ spell/
 nvim-pack-lock.json
 
 .DS_Store
+
+# Local / machine-specific configurations (kept out of public git)
+lsp/
+lua/local.lua
+lua/local/
+*.local
+lazy-lock.json

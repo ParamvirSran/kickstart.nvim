@@ -92,6 +92,9 @@ do
   -- Enable faster startup by caching compiled Lua modules
   vim.loader.enable()
 
+  -- Ensure ~/.local/bin is in PATH for tools like tree-sitter CLI
+  vim.env.PATH = vim.env.HOME .. '/.local/bin:' .. vim.env.PATH
+
   -- Set <space> as the leader key
   -- See `:help mapleader`
   --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -123,6 +126,21 @@ do
   --  Remove this option if you want your OS clipboard to remain independent.
   --  See `:help 'clipboard'`
   vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
+
+  -- Over remote SSH / tmux, configure OSC 52 so yank copies to system clipboard
+  if vim.env.SSH_TTY or vim.env.TMUX then
+    vim.g.clipboard = {
+      name = 'OSC 52',
+      copy = {
+        ['+'] = require('vim.ui.clipboard.osc52').copy '+',
+        ['*'] = require('vim.ui.clipboard.osc52').copy '*',
+      },
+      paste = {
+        ['+'] = require('vim.ui.clipboard.osc52').paste '+',
+        ['*'] = require('vim.ui.clipboard.osc52').paste '*',
+      },
+    }
+  end
 
   -- Enable break indent
   vim.o.breakindent = true
@@ -733,8 +751,8 @@ do
   --  See `:help lsp-config` for information about keys and how to configure
   ---@type table<string, vim.lsp.Config>
   local servers = {
-    -- clangd = {},
-    -- gopls = {},
+    clangd = {},
+    gopls = {},
     -- pyright = {},
     -- tsc = {},
     --
@@ -1023,16 +1041,10 @@ do
   -- NOTE: You can add your own plugins, configuration, etc. in `lua/custom/plugins/*.lua`.
   --
   -- For independent modules, uncomment the convenience loader:
-  -- require 'custom.plugins'
-  --
-  -- `custom.plugins` automatically loads files from that directory, but their
-  -- order is unspecified. If plugins depend on each other, keep them in the same
-  -- file and put their `vim.pack.add()` and `setup()` calls in the required order.
-  --
-  -- If separate modules need a specific order, require them explicitly instead:
-  -- require 'custom.plugins.colorscheme'
-  -- require 'custom.plugins.ui'
-  -- require 'custom.plugins.git'
+  require 'custom.plugins'
+
+  -- Load machine-local configuration if present (gitignored)
+  pcall(require, 'local')
 end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
