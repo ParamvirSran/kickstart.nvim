@@ -92,6 +92,20 @@ do
   -- Enable faster startup by caching compiled Lua modules
   vim.loader.enable()
 
+  -- Kickstart upstream master uses Neovim 0.12's built-in vim.pack and PackChanged event.
+  -- Warn gracefully if an older Neovim binary (such as system /usr/bin/nvim v0.11.6) is invoked.
+  if vim.fn.has 'nvim-0.12' == 0 then
+    vim.notify(
+      ('Kickstart requires Neovim >= 0.12 (vim.pack). You are running Neovim %s at %s.\n'
+        .. 'Please ensure ~/.local/bin is first in your PATH or launch ~/.local/bin/nvim.'):format(
+        vim.version().major .. '.' .. vim.version().minor .. '.' .. vim.version().patch,
+        vim.v.progpath
+      ),
+      vim.log.levels.ERROR
+    )
+    return
+  end
+
   -- Ensure ~/.local/bin is in PATH for tools like tree-sitter CLI
   vim.env.PATH = vim.env.HOME .. '/.local/bin:' .. vim.env.PATH
 
