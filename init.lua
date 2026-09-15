@@ -109,6 +109,9 @@ do
   -- NOTE: You can change these options as you wish!
   --  For more options, you can see `:help option-list`
 
+  -- Explicitly set dark background to prevent Neovim 0.12+ DSR terminal query delays
+  vim.o.background = 'dark'
+
   -- Make line numbers default
   vim.o.number = true
   -- You can also add relative line numbers, to help with jumping.
@@ -127,7 +130,10 @@ do
   --  See `:help 'clipboard'`
   vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
-  -- Over remote SSH / tmux, configure OSC 52 so yank copies to system clipboard
+  -- Over remote SSH / tmux, configure OSC 52 so yank copies to system clipboard.
+  -- NOTE: OSC 52 paste queries the terminal for clipboard contents. When the terminal
+  -- does not respond (standard for security in tmux/alacritty), Neovim blocks for 10s.
+  -- We use OSC 52 strictly for copy and read from the unnamed register for paste.
   if vim.env.SSH_TTY or vim.env.TMUX then
     vim.g.clipboard = {
       name = 'OSC 52',
@@ -136,8 +142,8 @@ do
         ['*'] = require('vim.ui.clipboard.osc52').copy '*',
       },
       paste = {
-        ['+'] = require('vim.ui.clipboard.osc52').paste '+',
-        ['*'] = require('vim.ui.clipboard.osc52').paste '*',
+        ['+'] = function() return { vim.fn.getreg '"', vim.fn.getregtype '"' } end,
+        ['*'] = function() return { vim.fn.getreg '"', vim.fn.getregtype '"' } end,
       },
     }
   end
@@ -965,9 +971,18 @@ do
   -- NOTE: You can also specify a branch or a specific commit
   vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
-  -- Ensure basic parsers are installed
+  -- Ensure basic parsers are installed (only trigger install for missing parsers)
   local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
-  require('nvim-treesitter').install(parsers)
+  local installed_parsers = require('nvim-treesitter').get_installed 'parsers'
+  local missing_parsers = {}
+  for _, p in ipairs(parsers) do
+    if not vim.tbl_contains(installed_parsers, p) then
+      table.insert(missing_parsers, p)
+    end
+  end
+  if #missing_parsers > 0 then
+    require('nvim-treesitter').install(missing_parsers)
+  end
 
   ---@param buf integer
   ---@param language string
