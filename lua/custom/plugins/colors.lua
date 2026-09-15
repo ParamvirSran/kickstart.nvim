@@ -11,3 +11,9 @@ vim.pack.add {
   'https://github.com/sainnhe/sonokai',
   'https://github.com/sainnhe/everforest',
 }
+
+require('catppuccin').setup {
+  flavour = 'macchiato',
+}
+
+vim.cmd.colorscheme 'catppuccin-macchiato'
