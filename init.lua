@@ -993,7 +993,7 @@ do
 
   -- Ensure basic parsers are installed (only trigger install for missing parsers if CLI is available)
   local has_tree_sitter_cli = vim.fn.executable 'tree-sitter' == 1
-  local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+  local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
   local missing_parsers = {}
   for _, p in ipairs(parsers) do
     if not vim.treesitter.language.add(p) then
