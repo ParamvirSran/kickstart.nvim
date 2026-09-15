@@ -985,7 +985,8 @@ do
   -- NOTE: You can also specify a branch or a specific commit
   vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
-  -- Ensure basic parsers are installed (only trigger install for missing parsers)
+  -- Ensure basic parsers are installed (only trigger install for missing parsers if CLI is available)
+  local has_tree_sitter_cli = vim.fn.executable 'tree-sitter' == 1
   local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
   local installed_parsers = require('nvim-treesitter').get_installed 'parsers'
   local missing_parsers = {}
@@ -995,7 +996,17 @@ do
     end
   end
   if #missing_parsers > 0 then
-    require('nvim-treesitter').install(missing_parsers)
+    if has_tree_sitter_cli then
+      require('nvim-treesitter').install(missing_parsers)
+    else
+      vim.schedule(function()
+        vim.notify(
+          'Treesitter CLI (`tree-sitter`) is not installed or not in PATH.\nParsers cannot be compiled until it is installed.\n• macOS: brew install tree-sitter-cli\n• Linux: cargo install tree-sitter-cli',
+          vim.log.levels.WARN,
+          { title = 'Treesitter' }
+        )
+      end)
+    end
   end
 
   ---@param buf integer
@@ -1037,8 +1048,12 @@ do
         -- Enable the parser if it is already installed
         treesitter_try_attach(buf, language)
       elseif vim.tbl_contains(available_parsers, language) then
-        -- If a parser is available in `nvim-treesitter`, auto-install it and enable it after the installation is done
-        require('nvim-treesitter').install(language):await(function() treesitter_try_attach(buf, language) end)
+        if has_tree_sitter_cli then
+          -- If a parser is available in `nvim-treesitter`, auto-install it and enable it after the installation is done
+          require('nvim-treesitter').install(language):await(function() treesitter_try_attach(buf, language) end)
+        else
+          treesitter_try_attach(buf, language)
+        end
       else
         -- Try to enable treesitter features in case the parser exists but is not available from `nvim-treesitter`
         treesitter_try_attach(buf, language)
